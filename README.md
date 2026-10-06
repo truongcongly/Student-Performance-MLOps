@@ -16,8 +16,9 @@ artifacts/models/  Saved model files
 requirements.txt   Python dependencies
 ```
 
-The folders are currently placeholders. Dataset selection and baseline model
-implementation are separate steps in stage 1.
+The raw dataset source and download instructions are in
+[`data/raw/README.md`](data/raw/README.md). Baseline model implementation is a
+later step in stage 1.
 
 ## Local setup
 
