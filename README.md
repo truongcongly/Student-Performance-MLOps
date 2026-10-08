@@ -17,8 +17,7 @@ requirements.txt   Python dependencies
 ```
 
 The raw dataset source and download instructions are in
-[`data/raw/README.md`](data/raw/README.md). Baseline model implementation is a
-later step in stage 1.
+[`data/raw/README.md`](data/raw/README.md).
 
 Initial exploration is in [`notebooks/01_eda.ipynb`](notebooks/01_eda.ipynb).
 The target, prediction time, and chosen inputs are in
@@ -35,3 +34,16 @@ python -m pip install -r requirements.txt
 ```
 
 The `.venv` directory is excluded from Git by `.gitignore`.
+
+## Train the baseline
+
+After downloading the dataset, run from the project root:
+
+```powershell
+python -m src.models.train
+python -m unittest discover -s tests
+```
+
+The first command makes a reproducible 80/20 split and fits a Ridge pipeline
+on training rows only. It prints training MAE as a smoke check; held-out test
+metrics and model comparison belong to the next step.
