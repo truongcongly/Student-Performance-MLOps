@@ -20,6 +20,10 @@ The raw dataset source and download instructions are in
 [`data/raw/README.md`](data/raw/README.md). Baseline model implementation is a
 later step in stage 1.
 
+Initial exploration is in [`notebooks/01_eda.ipynb`](notebooks/01_eda.ipynb).
+The target, prediction time, and chosen inputs are in
+[`docs/prediction_spec.md`](docs/prediction_spec.md).
+
 ## Local setup
 
 Use a recent Python 3 version. From the project root:
