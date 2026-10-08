@@ -35,15 +35,18 @@ python -m pip install -r requirements.txt
 
 The `.venv` directory is excluded from Git by `.gitignore`.
 
-## Train the baseline
+## Train and compare models
 
 After downloading the dataset, run from the project root:
 
 ```powershell
 python -m src.models.train
+python -m src.models.compare
 python -m unittest discover -s tests
 ```
 
-The first command makes a reproducible 80/20 split and fits a Ridge pipeline
-on training rows only. It prints training MAE as a smoke check; held-out test
-metrics and model comparison belong to the next step.
+The first command makes a reproducible 80/20 split and fits a Ridge pipeline.
+The comparison command uses 5-fold cross-validation on training rows to select
+among a mean baseline, Ridge, and Random Forest. It then reports MAE, RMSE,
+and R2 on the held-out test rows. See [`docs/model_evaluation.md`](docs/model_evaluation.md)
+for results and limitations.

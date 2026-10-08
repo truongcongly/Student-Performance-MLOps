@@ -1,6 +1,7 @@
 """Train the first reproducible regression baseline."""
 
 from sklearn.compose import ColumnTransformer
+from sklearn.base import BaseEstimator
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_absolute_error
@@ -11,7 +12,7 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from src.data.load import CATEGORICAL_FEATURES, NUMERIC_FEATURES, load_data
 
 
-def build_pipeline() -> Pipeline:
+def build_pipeline(estimator: BaseEstimator | None = None) -> Pipeline:
     numeric = Pipeline([
         ("imputer", SimpleImputer(strategy="median")),
         ("scaler", StandardScaler()),
@@ -24,7 +25,10 @@ def build_pipeline() -> Pipeline:
         ("numeric", numeric, list(NUMERIC_FEATURES)),
         ("categorical", categorical, list(CATEGORICAL_FEATURES)),
     ])
-    return Pipeline([("preprocessing", preprocessing), ("model", Ridge(alpha=1.0))])
+    return Pipeline([
+        ("preprocessing", preprocessing),
+        ("model", estimator if estimator is not None else Ridge(alpha=1.0)),
+    ])
 
 
 def main() -> None:
@@ -37,7 +41,7 @@ def main() -> None:
     train_mae = mean_absolute_error(y_train, pipeline.predict(x_train))
     print(f"Train rows: {len(x_train)}; held-out test rows: {len(x_test)}")
     print(f"Ridge training MAE: {train_mae:.3f} grade points")
-    print("Test set reserved for model comparison and evaluation in the next step.")
+    print("Test set reserved for model comparison and evaluation.")
 
 
 if __name__ == "__main__":

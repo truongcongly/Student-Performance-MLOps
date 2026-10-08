@@ -27,5 +27,5 @@ depends on when prediction happens. These observations come from
 [`notebooks/01_eda.ipynb`](../notebooks/01_eda.ipynb); correlation does not
 establish causation or model quality.
 
-The next step will split train and test data before fitting any preprocessing
-or model. It will evaluate predictions on held-out students.
+Training and held-out evaluation now follow this feature contract; see
+[`model_evaluation.md`](model_evaluation.md) for the current results.
