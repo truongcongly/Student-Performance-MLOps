@@ -1,5 +1,8 @@
 """Select a model by training folds, then evaluate once on held-out data."""
 
+from pathlib import Path
+
+import joblib
 import numpy as np
 from sklearn.dummy import DummyRegressor
 from sklearn.ensemble import RandomForestRegressor
@@ -12,6 +15,15 @@ from src.models.train import build_pipeline
 
 
 SEED = 42
+MODEL_PATH = Path(__file__).resolve().parents[2] / "artifacts" / "models" / "student_grade_pipeline.joblib"
+
+
+def save_and_verify(model, sample, path: Path = MODEL_PATH) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    expected = model.predict(sample)
+    joblib.dump(model, path)
+    restored = joblib.load(path)
+    np.testing.assert_allclose(restored.predict(sample), expected)
 
 
 def main() -> None:
@@ -44,6 +56,8 @@ def main() -> None:
     print(f"Held-out test MAE: {mean_absolute_error(y_test, predictions):.3f}")
     print(f"Held-out test RMSE: {np.sqrt(mean_squared_error(y_test, predictions)):.3f}")
     print(f"Held-out test R2: {r2_score(y_test, predictions):.3f}")
+    save_and_verify(model, x_test.head(5))
+    print(f"Saved and verified pipeline: {MODEL_PATH}")
 
 
 if __name__ == "__main__":
