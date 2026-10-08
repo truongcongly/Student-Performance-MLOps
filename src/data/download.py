@@ -12,12 +12,27 @@ OUTPUT = Path(__file__).resolve().parents[2] / "data" / "raw" / "student-mat.csv
 REQUIRED_COLUMNS = {"school", "age", "studytime", "absences", "G1", "G2", "G3"}
 
 
+def find_csv(archive_bytes: bytes) -> bytes:
+    with ZipFile(io.BytesIO(archive_bytes)) as archive:
+        for name in archive.namelist():
+            if Path(name).name == "student-mat.csv":
+                return archive.read(name)
+
+        for name in archive.namelist():
+            if name.lower().endswith(".zip"):
+                try:
+                    return find_csv(archive.read(name))
+                except FileNotFoundError:
+                    continue
+
+    raise FileNotFoundError("student-mat.csv was not found in the UCI archive")
+
+
 def main() -> None:
     with urlopen(DATASET_URL, timeout=30) as response:
         archive_bytes = response.read()
 
-    with ZipFile(io.BytesIO(archive_bytes)) as archive:
-        data = archive.read("student-mat.csv")
+    data = find_csv(archive_bytes)
 
     rows = list(csv.DictReader(io.StringIO(data.decode("utf-8")), delimiter=";"))
     if len(rows) != 395 or not REQUIRED_COLUMNS.issubset(rows[0]):
