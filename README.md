@@ -2,8 +2,8 @@
 
 End-to-end MLOps project for predicting the final mathematics grade (`G3`,
 0-20) from information available near the start of the course. This repository
-contains a reproducible machine learning baseline and MLflow experiment
-tracking. An inference API, deployment, and monitoring are future stages.
+contains a reproducible machine learning baseline, MLflow experiment tracking,
+and a prediction API. Deployment and monitoring are future stages.
 
 ## Project structure
 
@@ -63,6 +63,23 @@ records held-out test MAE, RMSE, and R2. Stop the server with `Ctrl+C`.
 The local SQLite database and artifact directory are ignored by Git.
 For the run comparison and selection rules, see
 [`docs/mlflow_experiments.md`](docs/mlflow_experiments.md).
+
+## Stage 3: prediction API
+
+After installing dependencies and creating the model artifact, run from the
+project root:
+
+```cmd
+python -m uvicorn src.api.main:app --host 127.0.0.1 --port 8000
+```
+
+Open `http://127.0.0.1:8000/docs` for the interactive request schema.
+`GET /health` reports that the service started; `POST /predict` accepts exactly the
+12 early-course features listed in the prediction specification and returns
+`predicted_grade`. The pipeline loads once at startup. A missing or unreadable
+model file prevents the service from starting. The numerical library versions
+in `requirements.txt` match those used to create the checked-in `.joblib`
+pipeline; reinstall dependencies after updating an existing environment.
 
 ## Reproduce stage 1
 
