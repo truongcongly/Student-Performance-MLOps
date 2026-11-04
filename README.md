@@ -80,6 +80,7 @@ Open `http://127.0.0.1:8000/docs` for the interactive request schema.
 model file prevents the service from starting. The numerical library versions
 in `requirements.txt` match those used to create the checked-in `.joblib`
 pipeline; reinstall dependencies after updating an existing environment.
+For a request example and error behavior, see [`docs/api.md`](docs/api.md).
 
 ## Reproduce stage 1
 
