@@ -97,6 +97,8 @@ def main(track: bool = False) -> None:
             mlflow.set_tag("selected_by_cv", "true")
             mlflow.log_metrics(test_metrics)
     print(f"Selected by CV: {best_name}")
+    if mlflow is not None:
+        print(f"Selected MLflow run ID: {run_ids[best_name]}")
     print(f"Held-out test MAE: {test_metrics['test_mae']:.3f}")
     print(f"Held-out test RMSE: {test_metrics['test_rmse']:.3f}")
     print(f"Held-out test R2: {test_metrics['test_r2']:.3f}")

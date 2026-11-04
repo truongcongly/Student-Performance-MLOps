@@ -61,6 +61,8 @@ three runs (Mean baseline, Ridge, Random Forest) with model parameters,
 cross-validation MAE, and a fitted pipeline artifact. The chosen run also
 records held-out test MAE, RMSE, and R2. Stop the server with `Ctrl+C`.
 The local SQLite database and artifact directory are ignored by Git.
+For the run comparison and selection rules, see
+[`docs/mlflow_experiments.md`](docs/mlflow_experiments.md).
 
 ## Reproduce stage 1
 
