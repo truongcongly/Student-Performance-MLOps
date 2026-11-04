@@ -36,6 +36,21 @@ python -m pip install -r requirements.txt
 
 The `.venv` directory is excluded from Git by `.gitignore`.
 
+## Stage 2: local MLflow UI
+
+To start experiment tracking locally from the project root in **Git CMD**:
+
+```cmd
+python -m venv .venv
+.venv\Scripts\activate.bat
+python -m pip install -r requirements.txt
+mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlartifacts --host 127.0.0.1 --port 5000
+```
+
+Open `http://127.0.0.1:5000` in your browser. Stop the server with `Ctrl+C`.
+The local SQLite database and artifact directory are ignored by Git. This
+step only starts the UI; training runs will be logged in the next step.
+
 ## Reproduce stage 1
 
 Run these commands from the project root after installing dependencies:
