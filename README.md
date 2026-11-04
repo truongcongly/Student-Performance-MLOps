@@ -2,8 +2,8 @@
 
 End-to-end MLOps project for predicting the final mathematics grade (`G3`,
 0-20) from information available near the start of the course. This repository
-currently contains the reproducible machine learning baseline. Experiment
-tracking, an inference API, deployment, and monitoring are future stages.
+contains a reproducible machine learning baseline and MLflow experiment
+tracking. An inference API, deployment, and monitoring are future stages.
 
 ## Project structure
 
@@ -47,9 +47,20 @@ python -m pip install -r requirements.txt
 mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlartifacts --host 127.0.0.1 --port 5000
 ```
 
-Open `http://127.0.0.1:5000` in your browser. Stop the server with `Ctrl+C`.
-The local SQLite database and artifact directory are ignored by Git. This
-step only starts the UI; training runs will be logged in the next step.
+Keep this server running. In a **second Git CMD** at the project root, activate
+the same environment and run:
+
+```cmd
+.venv\Scripts\activate.bat
+python -m src.models.compare --track
+```
+
+Open `http://127.0.0.1:5000` and select the
+`student-performance-early-prediction` experiment. Each execution creates
+three runs (Mean baseline, Ridge, Random Forest) with model parameters,
+cross-validation MAE, and a fitted pipeline artifact. The chosen run also
+records held-out test MAE, RMSE, and R2. Stop the server with `Ctrl+C`.
+The local SQLite database and artifact directory are ignored by Git.
 
 ## Reproduce stage 1
 
@@ -64,7 +75,8 @@ python -m unittest discover -s tests
 
 The download command obtains the original UCI mathematics CSV (395 rows) and
 checks its schema. The training command is a Ridge smoke check. The comparison
-command splits the data 80/20 (`random_state=42`), selects among a mean
+command works without MLflow; use `--track` to send its runs to the server.
+It splits the data 80/20 (`random_state=42`) and selects among a mean
 baseline, Ridge, and Random Forest using 5-fold cross-validation on training
 rows, and evaluates the chosen model on 79 held-out rows. It saves the fitted
 preprocessing-plus-model pipeline to
