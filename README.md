@@ -92,8 +92,8 @@ docker build -t student-performance-api:local .
 docker run --rm -p 8000:8000 student-performance-api:local
 ```
 
-Open `http://127.0.0.1:8000/health` to check the container. Use another host
-port if a local API server already uses 8000, for example `-p 8001:8000`.
+For a background container on port 8001, use `scripts\run-docker.cmd`.
+Build, request, logs, and stop commands are in [`docs/docker.md`](docs/docker.md).
 
 ## Reproduce stage 1
 
