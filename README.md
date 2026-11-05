@@ -82,6 +82,19 @@ in `requirements.txt` match those used to create the checked-in `.joblib`
 pipeline; reinstall dependencies after updating an existing environment.
 For a request example and error behavior, see [`docs/api.md`](docs/api.md).
 
+## Stage 4: Docker image
+
+The Dockerfile packages the inference API and the checked-in pipeline using
+only `requirements-api.txt`. From the project root, with Docker running:
+
+```cmd
+docker build -t student-performance-api:local .
+docker run --rm -p 8000:8000 student-performance-api:local
+```
+
+Open `http://127.0.0.1:8000/health` to check the container. Use another host
+port if a local API server already uses 8000, for example `-p 8001:8000`.
+
 ## Reproduce stage 1
 
 Run these commands from the project root after installing dependencies:
