@@ -98,9 +98,10 @@ Build, request, logs, and stop commands are in [`docs/docker.md`](docs/docker.md
 ## Stage 5: automated checks
 
 GitHub Actions runs the data, model, tracking, and API tests on every push and
-pull request using Python 3.13. Run the same tests locally with
-`python -m unittest discover -s tests -v`. Docker image validation is a
-separate next step.
+pull request using Python 3.13. After tests pass, it builds the Docker image
+and calls the container's health and prediction endpoints. Run the same tests
+locally with `python -m unittest discover -s tests -v`. See
+[`docs/ci.md`](docs/ci.md) for acceptance checks and failure diagnosis.
 
 ## Reproduce stage 1
 

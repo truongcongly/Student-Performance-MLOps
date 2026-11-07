@@ -22,3 +22,32 @@ jobs:
           python -m pip install -r requirements-api.txt 'httpx>=0.27,<1'
       - name: Run unit and API tests
         run: python -m unittest discover -s tests -v
+
+  docker:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build image
+        run: docker build -t student-performance-api:ci .
+      - name: Start container
+        run: docker run --detach --name student-performance-api-ci --publish 127.0.0.1:8001:8000 student-performance-api:ci
+      - name: Smoke test API
+        run: |
+          for attempt in {1..30}; do
+            if curl -fs http://127.0.0.1:8001/health > /dev/null; then
+              break
+            fi
+            sleep 2
+          done
+          curl -fsS http://127.0.0.1:8001/health
+          curl -fsS -X POST http://127.0.0.1:8001/predict \
+            -H 'Content-Type: application/json' \
+            --data-binary @docs/examples/student_request.json |
+            python3 -c 'import json, math, sys; value = json.load(sys.stdin)["predicted_grade"]; assert isinstance(value, (int, float)) and math.isfinite(value)'
+      - name: Show container logs on failure
+        if: failure()
+        run: docker logs student-performance-api-ci || true
+      - name: Remove test container
+        if: always()
+        run: docker rm --force student-performance-api-ci || true
