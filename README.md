@@ -95,6 +95,13 @@ docker run --rm -p 8000:8000 student-performance-api:local
 For a background container on port 8001, use `scripts\run-docker.cmd`.
 Build, request, logs, and stop commands are in [`docs/docker.md`](docs/docker.md).
 
+## Stage 5: automated checks
+
+GitHub Actions runs the data, model, tracking, and API tests on every push and
+pull request using Python 3.13. Run the same tests locally with
+`python -m unittest discover -s tests -v`. Docker image validation is a
+separate next step.
+
 ## Reproduce stage 1
 
 Run these commands from the project root after installing dependencies:
